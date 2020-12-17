@@ -8,4 +8,14 @@ Object::Object() {
     position = glm::vec3(0.0f, 0.0f, 0.0f);
     scale = glm::vec3(1.0f, 1.0f, 1.0f);
     rotation = glm::vec4(0.0f,0.0f,0.0f,0.0f);
+
+    glGenBuffers(1, &vertexBuffer);
+}
+
+Object::~Object() {
+    glDeleteBuffers(1, &vertexBuffer);
+}
+
+glm::mat4 Object::getMVPMatrix(glm::mat4 cameraMatrix) {
+    return cameraMatrix * glm::translate(position) * glm::scale(scale);
 }

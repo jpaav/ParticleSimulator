@@ -4,6 +4,7 @@
 #include <iostream>
 #include <map>
 #include "viewports/Viewport.h"
+#include "viewports/Camera.h"
 #include "callbacks.h"
 #include "viewports/EmptyObject.h"
 
@@ -16,22 +17,15 @@ int main() {
         return 1;
     }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     glfwSetErrorCallback(error_callback);
 
     std::map<std::string, Viewport *> viewports = std::map<std::string, Viewport *>();
     viewports["main"] = new Viewport("Particle Simulator", 1440, 900);
-
-    // Init GLEW (must be done after a window has been added and put into context)
-    GLenum err = glewInit();
-    if (GLEW_OK != err)
-    {
-        std::cerr << "Error: " << glewGetErrorString(err) << std::endl;
-        glfwTerminate();
-        return 1;
-    }
 
     viewports["main"]->addObject(new EmptyObject());
 

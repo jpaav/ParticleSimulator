@@ -6,10 +6,23 @@
 #define PARTICLESIMULATOR_EMPTYOBJECT_H
 
 #include "Object.h"
+#include "Shader.h"
+
+#include <GL/glew.h>
+#include <glm/glm.hpp>
 
 class EmptyObject : public Object {
 public:
-    void draw() override;
+    EmptyObject();
+
+    void draw(glm::mat4 &cameraMatrix, Shader *shader) override;
+
+private:
+    constexpr static const float axisVertices[] = {
+            -0.5f, -0.5f, 0.0f,
+            0.5f, -0.5f, 0.0f,
+            0.0f, 0.5f, 0.0f
+    };
 };
 
 

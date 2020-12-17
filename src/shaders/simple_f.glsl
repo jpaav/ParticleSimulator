@@ -1,12 +1,12 @@
 
 #version 330 core
 
-//in vec3 col;
+in vec4 vertexColor;
 
-out vec3 color;
+out vec4 FragColor;
 
 
 
 void main(){
-    color = vec3(1,1,1);
+    FragColor = vertexColor;
 }
