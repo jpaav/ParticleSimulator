@@ -23,11 +23,6 @@ enum CameraModes {
 class Camera {
 private:
     /**
-     * A pointer to the current delta time between the last frame and
-     * the current frame.
-     */
-    double* deltaTime;
-    /**
      * The current position of the camera.
      */
     glm::vec3 position;
@@ -74,13 +69,11 @@ private:
      */
     glm::vec3 forward;
     /**
-     * The fov of the camera, used to calculate the view matrix.
+     * The fov of the camera, used to calculate the view matrix. Stored in degrees for convenience.
      */
     float fov;
 public:
-
-    explicit Camera(double *dt);
-
+    Camera();
     /**
      * Updates the rotation of the camera using the mouse.
      * Only relevant for INPUT_MODE.

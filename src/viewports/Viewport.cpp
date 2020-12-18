@@ -21,11 +21,14 @@ Viewport::Viewport(const char *name, int width, int height) {
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+    glfwGetCursorPos(window, &cursorPosition.x, &cursorPosition.y);
+    lastCursorPosition = cursorPosition;
+
     // Initial deltaTime
     deltaTime = new double(-1.0);
     // Setup cameras
     cameras = std::vector<Camera *>();
-    auto camera = new Camera(deltaTime);
+    auto camera = new Camera();
     cameras.push_back(camera);
     activeCamera = camera;
     // Setup Shader
