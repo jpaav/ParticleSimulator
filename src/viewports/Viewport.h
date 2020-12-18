@@ -34,16 +34,13 @@ private:
     void processInput();
 public:
     Viewport(const char* name, int width, int height);
-
-    glm::dvec2 getCursorPosition();
+    virtual ~Viewport();
 
     void addObject(Object* object);
     void setShader(Shader* shader);
     Camera* getActiveCamera();
     bool shouldClose();
     void render();
-
-    virtual ~Viewport();
 };
 
 

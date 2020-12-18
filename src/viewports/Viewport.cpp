@@ -28,6 +28,8 @@ Viewport::Viewport(const char *name, int width, int height) {
     auto camera = new Camera(deltaTime);
     cameras.push_back(camera);
     activeCamera = camera;
+    // Setup Shader
+    this->shader = nullptr;
     // Init GLEW (should do nothing if it has already been initialized)
     glewExperimental = GL_TRUE;
     GLenum err = glewInit();
@@ -42,6 +44,7 @@ Viewport::Viewport(const char *name, int width, int height) {
 
 Viewport::~Viewport() {
     delete deltaTime;
+    delete shader;
     for(auto &it:objects) delete it; objects.clear();
     for(auto &it:cameras) delete it; cameras.clear();
     glDeleteVertexArrays(1, &vertexArrayObject);
@@ -70,7 +73,6 @@ void Viewport::render() {
     this->shader->use();
     // Run camera routines
     auto cameraMatrix = this->activeCamera->cameraMatrix(dimensions);
-    std::cout << this->activeCamera->getPos()[0] << ", " << this->activeCamera->getPos()[1] << ", " << this->activeCamera->getPos()[2] << std::endl;
     glBindVertexArray(vertexArrayObject);
     // Draw each object
     for (Object *const &object : this->objects) {
@@ -85,10 +87,6 @@ void Viewport::addObject(Object *object) {
 
 void Viewport::setShader(Shader *shader) {
     this->shader = shader;
-}
-
-glm::dvec2 Viewport::getCursorPosition() {
-    return this->cursorPosition;
 }
 
 Camera *Viewport::getActiveCamera() {
@@ -125,5 +123,5 @@ void Viewport::processInput() {
         this->activeCamera->moveDown();
     }
 
-    this->activeCamera->update(lastCursorPosition - cursorPosition);
+    this->activeCamera->updateRotation(lastCursorPosition - cursorPosition);
 }

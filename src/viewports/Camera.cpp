@@ -7,7 +7,7 @@
 Camera::Camera(double *dt) {
     deltaTime = dt;
     position = glm::vec3(1.0f, 1.0f, 1.0f);
-    focusPoint = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3(0.0f, 0.0f, 0.0f);
     // horizontal angle : toward -Z
     horizontalAngle = 0.0;
     // vertical angle : 0, look at the horizon
@@ -25,7 +25,7 @@ Camera::Camera(double *dt) {
     mode = INPUT_MODE;
 }
 
-void Camera::update(glm::dvec2 deltaCursorPosition) {
+void Camera::updateRotation(glm::dvec2 deltaCursorPosition) {
     if (mode == TURNTABLE_MODE || mode == STATIC_MODE) {
         return;
     }
@@ -50,23 +50,20 @@ void Camera::update(glm::dvec2 deltaCursorPosition) {
 }
 
 glm::mat4 Camera::cameraMatrix(glm::ivec2 &dimensions) {
+    auto perspective = glm::perspective(glm::radians(fov), (float) dimensions.x / (float) dimensions.y, nClip, fClip);
     if (mode == TURNTABLE_MODE) {    //Over-rides camera position and returns and turntable animation
         GLfloat radius = 4.0f;
         GLfloat camX = sin(glfwGetTime()) * radius;
         GLfloat camZ = cos(glfwGetTime()) * radius;
         glm::mat4 view, projection;
-        view = glm::lookAt(glm::vec3(camX, 1.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
-        projection = glm::perspective(glm::radians(fov), (float) dimensions.x / (float) dimensions.y, nClip, fClip);
-        return projection * view;
+        return glm::lookAt(glm::vec3(camX, 1.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0)) * perspective;
     } else if (mode == STATIC_MODE) {
-        return glm::perspective(glm::radians(fov), (float) dimensions.x / (float) dimensions.y, nClip, fClip) *
-               glm::lookAt(position, glm::vec3(0.0f, 0.0f, 0.0f), up);
+        return glm::lookAt(position, glm::vec3(0.0f, 0.0f, 0.0f), up) * perspective;
     } else if (mode == INPUT_MODE) {
-        return glm::perspective(glm::radians(fov), (float) dimensions.x / (float) dimensions.y, nClip, fClip) *
-               glm::lookAt(position, position + forward, up);
+        return glm::lookAt(position, position + forward, up) * perspective;
     }
     std::cerr << "Camera has a mode value of " << mode << " which is not a valid option" << std::endl;
-    return glm::mat4();
+    return perspective;
 }
 
 void Camera::moveUp() {

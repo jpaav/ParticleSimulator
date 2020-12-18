@@ -19,7 +19,7 @@
 class Object {
 public:
     Object();
-    ~Object();
+    virtual ~Object();
     virtual void draw(glm::mat4 &cameraMatrix, Shader *shader) = 0;
     glm::vec3 position;
     glm::vec4 rotation;

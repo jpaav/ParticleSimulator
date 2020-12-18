@@ -22,33 +22,80 @@ enum CameraModes {
 
 class Camera {
 private:
+    /**
+     * A pointer to the current delta time between the last frame and
+     * the current frame.
+     */
     double* deltaTime;
+    /**
+     * The current position of the camera.
+     */
     glm::vec3 position;
-    glm::vec3 focusPoint;
+    /**
+     * The closest distance the camera will render, everything closer is
+     * clipped.
+     */
     float nClip;
+    /**
+     * The farthest distance the camera will render, everything farther is
+     * clipped.
+     */
     float fClip;
-    int width;
-    int height;
-    double verticalAngle;
-    double horizontalAngle;
-    double speed;
-    double mouseSpeed;
-public:
-    glm::vec3 up;
-    glm::vec3 right;
-    glm::vec3 forward;
+    /**
+     * The mode the camera is in. Must be a value from CameraModes.
+     */
     int mode;
+    /**
+     * The speed of the camera when it moves.
+     */
+    double speed;
+    /**
+     * The speed of the view rotation from the mouse.
+     */
+    double mouseSpeed;
+    /**
+     * The pitch of the camera. Used to calculate where the camera is looking in input mode.
+     */
+    double verticalAngle;
+    /**
+     * The yaw of the camera. Used to calculate where the camera is looking in input mode.
+     */
+    double horizontalAngle;
+    /**
+     * The current "up" of the camera. Used to calculate where the camera is looking in input mode.
+     */
+    glm::vec3 up;
+    /**
+     * The current "right" of the camera. Used to calculate where the camera is looking in input mode.
+     */
+    glm::vec3 right;
+    /**
+     * The current "forward" of the camera. Used to calculate where the camera is looking in input mode.
+     */
+    glm::vec3 forward;
+    /**
+     * The fov of the camera, used to calculate the view matrix.
+     */
     float fov;
+public:
 
-    Camera(double *dt);
+    explicit Camera(double *dt);
 
-    void update(glm::dvec2 deltaCursorPosition);
+    /**
+     * Updates the rotation of the camera using the mouse.
+     * Only relevant for INPUT_MODE.
+     * @param deltaCursorPosition used to calculate how to rotate the camera.
+     */
+    void updateRotation(glm::dvec2 deltaCursorPosition);
 
+    /**
+     * Returns the camera's matrix for rendering objects.
+     * @param dimensions the width and height of the screen
+     * @return the camera matrix
+     */
     glm::mat4 cameraMatrix(glm::ivec2 &dimensions);
 
     void setMode(CameraModes mode);
-
-    glm::vec3 getPos() { return position; }
 
     void moveForward();
 

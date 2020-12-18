@@ -20,8 +20,10 @@
 
 class Shader {
 private:
-    // the program ID
-    unsigned int ID;
+    /**
+     * The OpenGL shader id.
+     */
+    unsigned int id;
 public:
     Shader(const char* vertexPath, const char* fragmentPath);
     ~Shader();
