@@ -20,37 +20,31 @@ enum CameraModes {
     STATIC_MODE
 };
 
-#define PERSP_TYPE 1
-#define ORTHO_TYPE 2
-
 class Camera {
 private:
+    double* deltaTime;
     glm::vec3 position;
     glm::vec3 focusPoint;
     float nClip;
     float fClip;
     int width;
     int height;
-    float *deltaTime;
-    float verticalAngle;
-    float horizontalAngle;
-    float speed;
-    float mouseSpeed;
+    double verticalAngle;
+    double horizontalAngle;
+    double speed;
+    double mouseSpeed;
 public:
     glm::vec3 up;
     glm::vec3 right;
     glm::vec3 forward;
     int mode;
-    int type;
     float fov;
 
-    Camera();
+    Camera(double *dt);
 
-    void updatePos(glm::dvec2 &cursorPosition, glm::ivec2 &dimensions);
+    void update(glm::dvec2 deltaCursorPosition);
 
     glm::mat4 cameraMatrix(glm::ivec2 &dimensions);
-
-    void setDeltaTimePtr(float *dt) { deltaTime = dt; }
 
     void setMode(CameraModes mode);
 
@@ -64,21 +58,9 @@ public:
 
     void moveLeft();
 
-    void moveWest(float);
+    void moveUp();
 
-    void moveEast(float);
-
-    void moveNorth(float);
-
-    void moveSouth(float);
-
-    void moveUp(float);
-
-    void moveDown(float);
-
-    void rotateLeft(float);
-
-    void rotateRight(float);
+    void moveDown();
 
 };
 

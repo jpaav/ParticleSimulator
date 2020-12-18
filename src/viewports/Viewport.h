@@ -23,10 +23,15 @@ private:
     std::vector<Camera*> cameras;
     Camera* activeCamera;
     std::vector<Object*> objects;
+    glm::dvec2 lastCursorPosition;
     glm::dvec2 cursorPosition;
     glm::ivec2 dimensions;
     // TODO: allow multiple shaders
     Shader* shader;
+    double* deltaTime;
+    double lastFrame;
+
+    void processInput();
 public:
     Viewport(const char* name, int width, int height);
 

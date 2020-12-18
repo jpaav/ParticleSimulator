@@ -10,22 +10,24 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 
 Viewport::Viewport(const char *name, int width, int height) {
     // Create and bind window
-    this->dimensions = glm::ivec2(width, height);
-    this->window = glfwCreateWindow(width, height, name, nullptr, nullptr);
-    if (!this->window) {
+    dimensions = glm::ivec2(width, height);
+    window = glfwCreateWindow(width, height, name, nullptr, nullptr);
+    if (!window) {
         glfwTerminate();
         std::cerr << "Failed to initialize window." << std::endl;
         exit(EXIT_FAILURE);
     }
-    glfwMakeContextCurrent(this->window);
+    glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    // Initial Cursor Position
-    glfwGetCursorPos(this->window, &cursorPosition[0], &cursorPosition[1]);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    // Initial deltaTime
+    deltaTime = new double(-1.0);
     // Setup cameras
-    this->cameras = std::vector<Camera *>();
-    auto camera = new Camera();
-    this->cameras.push_back(camera);
-    this->activeCamera = camera;
+    cameras = std::vector<Camera *>();
+    auto camera = new Camera(deltaTime);
+    cameras.push_back(camera);
+    activeCamera = camera;
     // Init GLEW (should do nothing if it has already been initialized)
     glewExperimental = GL_TRUE;
     GLenum err = glewInit();
@@ -39,6 +41,9 @@ Viewport::Viewport(const char *name, int width, int height) {
 }
 
 Viewport::~Viewport() {
+    delete deltaTime;
+    for(auto &it:objects) delete it; objects.clear();
+    for(auto &it:cameras) delete it; cameras.clear();
     glDeleteVertexArrays(1, &vertexArrayObject);
     glfwDestroyWindow(this->window);
 }
@@ -48,38 +53,14 @@ bool Viewport::shouldClose() {
 }
 
 void Viewport::render() {
+    double currentTime = glfwGetTime();
+    *deltaTime = currentTime - lastFrame;
+    lastFrame = currentTime;
     glfwMakeContextCurrent(this->window);
+    lastCursorPosition = cursorPosition;
     glfwGetCursorPos(this->window, &cursorPosition[0], &cursorPosition[1]);
-    // Move forward
-    if (glfwGetKey(this->window, GLFW_KEY_W) == GLFW_PRESS) {
-        this->activeCamera->moveForward();
-        //position += direction * dt * speed;
-    }
-    // Move backward
-    if (glfwGetKey(this->window, GLFW_KEY_S) == GLFW_PRESS) {
-        this->activeCamera->moveBackward();
-        //position -= direction * dt * speed;
-    }
-    // Strafe right
-    if (glfwGetKey(this->window, GLFW_KEY_D) == GLFW_PRESS) {
-        this->activeCamera->moveRight();
-        //position += newRight * dt * speed;
-    }
-    // Strafe left
-    if (glfwGetKey(this->window, GLFW_KEY_A) == GLFW_PRESS) {
-        this->activeCamera->moveLeft();
-        //position -= newRight * dt * speed;
-    }
-    // Rotate right
-    if (glfwGetKey(this->window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-        this->activeCamera->rotateRight(1);
-        //position += newRight * dt * speed;
-    }
-    // Rotate left
-    if (glfwGetKey(this->window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-        this->activeCamera->rotateLeft(1);
-        //position -= newRight * dt * speed;
-    }
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    processInput();
     // Setup OpenGL flags
 //    glEnable(GL_DEPTH_TEST);
 //    glDepthFunc(GL_LESS);
@@ -89,7 +70,6 @@ void Viewport::render() {
     this->shader->use();
     // Run camera routines
     auto cameraMatrix = this->activeCamera->cameraMatrix(dimensions);
-    this->activeCamera->updatePos(cursorPosition, dimensions);
     std::cout << this->activeCamera->getPos()[0] << ", " << this->activeCamera->getPos()[1] << ", " << this->activeCamera->getPos()[2] << std::endl;
     glBindVertexArray(vertexArrayObject);
     // Draw each object
@@ -113,4 +93,37 @@ glm::dvec2 Viewport::getCursorPosition() {
 
 Camera *Viewport::getActiveCamera() {
     return this->activeCamera;
+}
+
+void Viewport::processInput() {
+    // Escape
+    if (glfwGetKey(this->window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, true);
+    }
+    // Move forward
+    if (glfwGetKey(this->window, GLFW_KEY_W) == GLFW_PRESS) {
+        this->activeCamera->moveForward();
+    }
+    // Move backward
+    if (glfwGetKey(this->window, GLFW_KEY_S) == GLFW_PRESS) {
+        this->activeCamera->moveBackward();
+    }
+    // Strafe right
+    if (glfwGetKey(this->window, GLFW_KEY_D) == GLFW_PRESS) {
+        this->activeCamera->moveRight();
+    }
+    // Strafe left
+    if (glfwGetKey(this->window, GLFW_KEY_A) == GLFW_PRESS) {
+        this->activeCamera->moveLeft();
+    }
+    // Up
+    if (glfwGetKey(this->window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+        this->activeCamera->moveUp();
+    }
+    // Down
+    if (glfwGetKey(this->window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+        this->activeCamera->moveDown();
+    }
+
+    this->activeCamera->update(lastCursorPosition - cursorPosition);
 }
