@@ -23,6 +23,10 @@ enum CameraModes {
 class Camera {
 private:
     /**
+     * A pointer to the window this camera is part of.
+     */
+    GLFWwindow *window;
+    /**
      * The current position of the camera.
      */
     glm::vec3 position;
@@ -72,23 +76,6 @@ private:
      * The fov of the camera, used to calculate the view matrix. Stored in degrees for convenience.
      */
     float fov;
-public:
-    Camera();
-    /**
-     * Updates the rotation of the camera using the mouse.
-     * Only relevant for INPUT_MODE.
-     * @param deltaCursorPosition used to calculate how to rotate the camera.
-     */
-    void updateRotation(glm::dvec2 deltaCursorPosition);
-
-    /**
-     * Returns the camera's matrix for rendering objects.
-     * @param dimensions the width and height of the screen
-     * @return the camera matrix
-     */
-    glm::mat4 cameraMatrix(glm::ivec2 &dimensions);
-
-    void setMode(CameraModes mode);
 
     void moveForward();
 
@@ -101,6 +88,27 @@ public:
     void moveUp();
 
     void moveDown();
+public:
+    explicit Camera(GLFWwindow *window);
+    /**
+     * Updates the rotation of the camera using the mouse.
+     * Only relevant for INPUT_MODE.
+     * @param deltaCursorPosition used to calculate how to rotate the camera.
+     */
+    void updateRotation(glm::dvec2 deltaCursorPosition);
+
+    void processInput();
+
+    /**
+     * Returns the camera's matrix for rendering objects.
+     * @param dimensions the width and height of the screen
+     * @return the camera matrix
+     */
+    glm::mat4 cameraMatrix(glm::ivec2 &dimensions);
+
+    void setMode(CameraModes mode);
+
+    void cycleMode();
 
 };
 

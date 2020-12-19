@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include "Object.h"
 #include "Shader.h"
+#include "../callbacks.h"
 
 #include <string>
 #include <vector>
@@ -30,8 +31,6 @@ private:
     Shader* shader;
     double* deltaTime;
     double lastFrame;
-
-    void processInput();
 public:
     Viewport(const char* name, int width, int height);
     virtual ~Viewport();
@@ -41,6 +40,7 @@ public:
     Camera* getActiveCamera();
     bool shouldClose();
     void render();
+
 };
 
 

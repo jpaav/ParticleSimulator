@@ -4,13 +4,9 @@
 
 #include "Viewport.h"
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    glViewport(0, 0, width, height);
-}
 
 Viewport::Viewport(const char *name, int width, int height) {
     // Create and bind window
-    dimensions = glm::ivec2(width, height);
     window = glfwCreateWindow(width, height, name, nullptr, nullptr);
     if (!window) {
         glfwTerminate();
@@ -18,17 +14,22 @@ Viewport::Viewport(const char *name, int width, int height) {
         exit(EXIT_FAILURE);
     }
     glfwMakeContextCurrent(window);
+    //Binds the Viewport to the window for use during key callbacks
+    glfwSetWindowUserPointer(window, this);
+    // Set callbacks
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetKeyCallback(window, key_callback);
 
+    // Cursor/window dimensions
     glfwGetCursorPos(window, &cursorPosition.x, &cursorPosition.y);
     lastCursorPosition = cursorPosition;
+    dimensions = glm::ivec2(width, height);
 
     // Initial deltaTime
     deltaTime = new double(-1.0);
     // Setup cameras
     cameras = std::vector<Camera *>();
-    auto camera = new Camera();
+    auto camera = new Camera(window);
     cameras.push_back(camera);
     activeCamera = camera;
     // Setup Shader
@@ -66,7 +67,9 @@ void Viewport::render() {
     lastCursorPosition = cursorPosition;
     glfwGetCursorPos(this->window, &cursorPosition[0], &cursorPosition[1]);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    processInput();
+
+    activeCamera->processInput();
+    activeCamera->updateRotation(lastCursorPosition - cursorPosition);
     // Setup OpenGL flags
 //    glEnable(GL_DEPTH_TEST);
 //    glDepthFunc(GL_LESS);
@@ -94,37 +97,4 @@ void Viewport::setShader(Shader *shader) {
 
 Camera *Viewport::getActiveCamera() {
     return this->activeCamera;
-}
-
-void Viewport::processInput() {
-    // Escape
-    if (glfwGetKey(this->window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, true);
-    }
-    // Move forward
-    if (glfwGetKey(this->window, GLFW_KEY_W) == GLFW_PRESS) {
-        this->activeCamera->moveForward();
-    }
-    // Move backward
-    if (glfwGetKey(this->window, GLFW_KEY_S) == GLFW_PRESS) {
-        this->activeCamera->moveBackward();
-    }
-    // Strafe right
-    if (glfwGetKey(this->window, GLFW_KEY_D) == GLFW_PRESS) {
-        this->activeCamera->moveRight();
-    }
-    // Strafe left
-    if (glfwGetKey(this->window, GLFW_KEY_A) == GLFW_PRESS) {
-        this->activeCamera->moveLeft();
-    }
-    // Up
-    if (glfwGetKey(this->window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-        this->activeCamera->moveUp();
-    }
-    // Down
-    if (glfwGetKey(this->window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-        this->activeCamera->moveDown();
-    }
-
-    this->activeCamera->updateRotation(lastCursorPosition - cursorPosition);
 }

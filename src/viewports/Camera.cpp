@@ -4,12 +4,13 @@
 
 #include "Camera.h"
 
-Camera::Camera() {
-    position = glm::vec3(0.0f, 0.0f, 10.0f);
+Camera::Camera(GLFWwindow *win) {
+    window = win;
+    position = glm::vec3(5.0, 5.0, 5.0);
     // horizontal angle : toward -Z
-    horizontalAngle = M_PI;
+    horizontalAngle = M_PI + M_PI_4;
     // vertical angle : 0, look at the horizon
-    verticalAngle = 0;
+    verticalAngle = -M_PI_4;
     //mouse speed
     mouseSpeed = 0.008f;
     //playback speed
@@ -20,7 +21,9 @@ Camera::Camera() {
     fov = 60.0f;
     nClip = 0.1f;
     fClip = 100.0f;
+    // Set default mode
     mode = INPUT_MODE;
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 void Camera::updateRotation(glm::dvec2 deltaCursorPosition) {
@@ -58,7 +61,7 @@ glm::mat4 Camera::cameraMatrix(glm::ivec2 &dimensions) {
         GLfloat radius = 4.0f;
         GLfloat camX = sin(glfwGetTime()) * radius;
         GLfloat camZ = cos(glfwGetTime()) * radius;
-        return glm::lookAt(glm::vec3(camX, 1.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0)) *
+        return glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0)) *
                glm::perspective(glm::radians(fov), (float) dimensions.x / (float) dimensions.y, nClip, fClip);
     } else if (mode == STATIC_MODE) {
         return glm::perspective(glm::radians(fov), (float) dimensions.x / (float) dimensions.y, nClip, fClip) *
@@ -96,5 +99,41 @@ void Camera::moveLeft() {
 }
 
 void Camera::setMode(CameraModes newMode) {
+    if (newMode == INPUT_MODE) {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    } else {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
     mode = newMode;
+}
+
+void Camera::cycleMode() {
+    setMode(static_cast<CameraModes>((mode + 1) % 3));
+}
+
+void Camera::processInput() {
+    // Move forward
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        moveForward();
+    }
+    // Move backward
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        moveBackward();
+    }
+    // Strafe right
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        moveRight();
+    }
+    // Strafe left
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        moveLeft();
+    }
+    // Up
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+        moveUp();
+    }
+    // Down
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+        moveDown();
+    }
 }
