@@ -13,9 +13,8 @@
 
 #include <vector>
 
-#include "Shader.h"
+#include "../viewports/Shader.h"
 
-// TODO: rename to AbstractObject
 class Object {
 public:
     Object();

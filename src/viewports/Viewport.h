@@ -9,7 +9,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Camera.h"
-#include "Object.h"
+#include "../objects/Object.h"
 #include "Shader.h"
 #include "../callbacks.h"
 
