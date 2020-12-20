@@ -6,9 +6,16 @@
 
 void MeshObject::draw(glm::mat4 &cameraMatrix, Shader *shader) {
     // Send MVP to shader in uniform variable
-    shader->setMatrix("MVP", getMVPMatrix(cameraMatrix));
+    shader->setMatrix("model", getModelMatrix());
+    shader->setMatrix("camera", cameraMatrix);
+    // TODO: make a material class that handles this stuff
+    shader->setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+    shader->setVec3("lightColor",  1.0f, 1.0f, 1.0f);
+    // TODO: make a light class that handles this stuff
+    shader->setVec3("lightPos", 1.0f, 1.0f, 1.0f);
 
     // Add Vertex Position Attribute
+    glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glVertexAttribPointer(
             0,          // Attribute 0. must match shader layout
@@ -18,9 +25,21 @@ void MeshObject::draw(glm::mat4 &cameraMatrix, Shader *shader) {
             0,          // stride
             (void *) 0  // array buffer offset
     );
-    glEnableVertexAttribArray(0);
+    // Add Normals Attribute
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
+    glVertexAttribPointer(
+            1,          // Attribute 1. must match shader layout
+            3,          // size
+            GL_FLOAT,   // type
+            GL_FALSE,   // normalized?
+            0,          // stride
+            (void *) 0  // array buffer offset
+    );
+
     glDrawArrays(GL_TRIANGLES, 0, vertices.size() * 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
     glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
 }
 
 MeshObject::MeshObject(const char *objPath) : Object() {

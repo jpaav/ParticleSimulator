@@ -26,7 +26,7 @@ public:
 protected:
     GLuint vertexBuffer;
     std::vector<glm::vec3> vertices;
-    glm::mat4 getMVPMatrix(glm::mat4 cameraMatrix);
+    glm::mat4 getModelMatrix();
 };
 
 

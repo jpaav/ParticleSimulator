@@ -9,6 +9,7 @@
 #include "objects/EmptyObject.h"
 #include "objects/MeshObject.h"
 
+// TODO: support this author: https://www.paypal.com/paypalme/learnopengl/
 
 int main() {
     // Init GLFW
@@ -30,8 +31,8 @@ int main() {
     viewports["main"]->addObject(
             new MeshObject("/Users/josephpaavola/CLionProjects/ParticleSimulator/src/objects/meshes/icosphere.obj"));
 
-    auto shader = new Shader("/Users/josephpaavola/CLionProjects/ParticleSimulator/src/shaders/simple_v.glsl",
-                             "/Users/josephpaavola/CLionProjects/ParticleSimulator/src/shaders/simple_f.glsl");
+    auto shader = new Shader("/Users/josephpaavola/CLionProjects/ParticleSimulator/src/shaders/phong_v.glsl",
+                             "/Users/josephpaavola/CLionProjects/ParticleSimulator/src/shaders/phong_f.glsl");
     viewports["main"]->setShader(shader);
 
 

@@ -16,6 +16,6 @@ Object::~Object() {
     glDeleteBuffers(1, &vertexBuffer);
 }
 
-glm::mat4 Object::getMVPMatrix(glm::mat4 cameraMatrix) {
-    return cameraMatrix * glm::translate(position) * glm::scale(scale);
+glm::mat4 Object::getModelMatrix() {
+    return glm::translate(position) * glm::scale(scale);
 }

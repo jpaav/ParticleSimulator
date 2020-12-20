@@ -63,19 +63,19 @@ void Viewport::render() {
     double currentTime = glfwGetTime();
     *deltaTime = currentTime - lastFrame;
     lastFrame = currentTime;
+    std::cout << "FPS: " << 1 / *deltaTime << "(" << *deltaTime * 1000 << "ms)" << std::endl;
     glfwMakeContextCurrent(this->window);
     lastCursorPosition = cursorPosition;
     glfwGetCursorPos(this->window, &cursorPosition[0], &cursorPosition[1]);
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
     activeCamera->processInput();
     activeCamera->updateRotation(lastCursorPosition - cursorPosition);
     // Setup OpenGL flags
-//    glEnable(GL_DEPTH_TEST);
-//    glDepthFunc(GL_LESS);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
     // Use shader
+    // TODO: add a world/scene class to handle this
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     this->shader->use();
     // Run camera routines
     auto cameraMatrix = this->activeCamera->cameraMatrix(dimensions);

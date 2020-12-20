@@ -12,7 +12,8 @@ EmptyObject::EmptyObject() : Object() {
 void EmptyObject::draw(glm::mat4 &cameraMatrix, Shader *shader) {
 
     // Send MVP to shader in uniform variable
-    shader->setMatrix("MVP", getMVPMatrix(cameraMatrix));
+    shader->setMatrix("model", getModelMatrix());
+    shader->setMatrix("camera", cameraMatrix);
 
     // Add Vertex Position Attribute
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
