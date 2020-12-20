@@ -14,46 +14,57 @@
 #include "Shader.h"
 #include "../callbacks.h"
 #include "Light.h"
+#include "../materials/Material.h"
 
 #include <string>
 #include <vector>
+#include <map>
 #include <iostream>
 
 class Viewport {
 private:
-    GLFWwindow* window;
+    GLFWwindow *window;
     GLuint vertexArrayObject;
-    std::vector<Camera*> cameras;
-    Camera* activeCamera;
+    std::vector<Camera *> cameras;
+    Camera *activeCamera;
 
-    std::vector<Object*> objects;
+    std::vector<Object *> objects;
     // TODO: allow multiple lights
-    Light* light;
+    Light *light;
+    std::map<std::string, Shader *> shaders;
+    std::map<std::string, Material *> materials;
 
     glm::dvec2 lastCursorPosition;
     glm::dvec2 cursorPosition;
     glm::ivec2 dimensions;
-    // TODO: allow multiple shaders
-    Shader* shader;
-    double* deltaTime;
+    double *deltaTime;
     double lastFrame;
 public:
     glm::vec3 ambientColor;
 
-    Viewport(const char* name, int width, int height);
+    Viewport(const char *name, int width, int height);
+
     virtual ~Viewport();
 
-    void addObject(Object* object);
-    void setShader(Shader* shader);
-    Camera* getActiveCamera();
+    void addObject(Object *object);
+
+    void addShader(const std::string &name, Shader *shader);
+
+    Shader *getShader(const std::string &name);
+
+    Camera *getActiveCamera();
+
     bool shouldClose();
+
     void render();
 
     glm::mat4 getCameraMatrix();
 
-    Shader * getShader();
-
     Light *getLight();
+
+    void addMaterial(const std::string &name, Material *material);
+
+    Material *getMaterial(const std::string &name);
 };
 
 

@@ -10,7 +10,7 @@
 
 class MeshObject : public Object {
 public:
-    explicit MeshObject(const char* objPath);
+    explicit MeshObject(const char *objPath, Material *material);
     ~MeshObject();
     void draw(Viewport *viewport) override;
 protected:
@@ -18,6 +18,7 @@ protected:
     GLuint normalBuffer;
     std::vector<glm::vec2> uvs;
     std::vector<glm::vec3> normals;
+    Material *material;
 
     void loadObj(const char *objPath);
 };

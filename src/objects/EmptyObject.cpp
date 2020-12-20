@@ -11,7 +11,7 @@ EmptyObject::EmptyObject() : Object() {
 
 void EmptyObject::draw(Viewport *viewport) {
 
-    Shader *shader = viewport->getShader();
+    Shader *shader = viewport->getShader("simple");
 
     // Send MVP to shader in uniform variable
     shader->setMatrix("model", getModelMatrix());

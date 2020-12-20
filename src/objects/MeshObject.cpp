@@ -5,12 +5,11 @@
 #include "MeshObject.h"
 
 void MeshObject::draw(Viewport *viewport) {
-    Shader *shader = viewport->getShader();
+    Shader *shader = material->shader;
+    material->use();
     // Send MVP to shader in uniform variable
     shader->setMatrix("model", getModelMatrix());
     shader->setMatrix("camera", viewport->getCameraMatrix());
-    // TODO: make a material class that handles this stuff
-    shader->setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
     shader->setVec3("light.color",  viewport->getLight()->color);
     shader->setVec3("light.position", viewport->getLight()->position);
     shader->setVec3("light.ambient", viewport->ambientColor);
@@ -43,7 +42,7 @@ void MeshObject::draw(Viewport *viewport) {
     glDisableVertexAttribArray(1);
 }
 
-MeshObject::MeshObject(const char *objPath) : Object() {
+MeshObject::MeshObject(const char *objPath, Material *material) : Object(), material(material) {
     glGenBuffers(1, &uvBuffer);
     glGenBuffers(1, &normalBuffer);
 
