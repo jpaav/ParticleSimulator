@@ -6,7 +6,7 @@
 #define PARTICLESIMULATOR_EMPTYOBJECT_H
 
 #include "Object.h"
-#include "../viewports/Shader.h"
+#include "../materials/Shader.h"
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>

@@ -13,7 +13,7 @@
 
 #include <vector>
 
-#include "../viewports/Shader.h"
+#include "../materials/Shader.h"
 #include "../viewports/Viewport.fwd.h"
 #include "../viewports/Viewport.h"
 

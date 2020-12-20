@@ -8,12 +8,12 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "Camera.h"
+#include "../cameras/Camera.h"
 #include "../objects/Object.fwd.h"
 #include "../objects/Object.h"
-#include "Shader.h"
+#include "../materials/Shader.h"
 #include "../callbacks.h"
-#include "Light.h"
+#include "../lights/Light.h"
 #include "../materials/Material.h"
 
 #include <string>

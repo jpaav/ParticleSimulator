@@ -3,7 +3,7 @@
 //
 
 #include "Viewport.h"
-#include "Light.h"
+#include "../lights/Light.h"
 
 
 Viewport::Viewport(const char *name, int width, int height) {

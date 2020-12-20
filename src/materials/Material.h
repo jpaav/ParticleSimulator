@@ -6,7 +6,7 @@
 #define PARTICLESIMULATOR_MATERIAL_H
 
 
-#include "../viewports/Shader.h"
+#include "Shader.h"
 
 class Material {
 public:

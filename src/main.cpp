@@ -4,7 +4,7 @@
 #include <iostream>
 #include <map>
 #include "viewports/Viewport.h"
-#include "viewports/Camera.h"
+#include "cameras/Camera.h"
 #include "callbacks.h"
 #include "objects/EmptyObject.h"
 #include "objects/MeshObject.h"
