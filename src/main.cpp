@@ -31,14 +31,23 @@ int main() {
 
     // Setup shaders
     auto simpleShader = new Shader("/Users/josephpaavola/CLionProjects/ParticleSimulator/src/shaders/simple_v.glsl",
-                                  "/Users/josephpaavola/CLionProjects/ParticleSimulator/src/shaders/simple_f.glsl");
+                                   "/Users/josephpaavola/CLionProjects/ParticleSimulator/src/shaders/simple_f.glsl");
     viewports["main"]->addShader("simple", simpleShader);
     auto phongShader = new Shader("/Users/josephpaavola/CLionProjects/ParticleSimulator/src/shaders/phong_v.glsl",
                                   "/Users/josephpaavola/CLionProjects/ParticleSimulator/src/shaders/phong_f.glsl");
     viewports["main"]->addShader("phong", phongShader);
 
     // Setup materials
-    viewports["main"]->addMaterial("phong", new PhongMaterial(glm::vec3(0.2, 0.05, 0.7), phongShader));
+    viewports["main"]->addMaterial(
+            "phong",
+            new PhongMaterial(
+                    glm::vec3(0.2, 0.05, 0.7),
+                    glm::vec3(0.2, 0.05, 0.7),
+                    glm::vec3(0.0, 0.0, 0.0),
+                    0.0,
+                    phongShader
+            )
+    );
 
     // Setup objects
     viewports["main"]->addObject(

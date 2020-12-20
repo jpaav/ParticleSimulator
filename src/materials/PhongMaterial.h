@@ -9,8 +9,12 @@
 #include "Material.h"
 
 class PhongMaterial : public Material {
+private:
+    glm::vec3 ambient;
+    glm::vec3 specular;
+    float shininess;
 public:
-    explicit PhongMaterial(glm::vec3 color, Shader *shader);
+    PhongMaterial(glm::vec3 diffuse, glm::vec3 ambient, glm::vec3 specular, float shininess, Shader *shader);
 
     void use() override;
 };

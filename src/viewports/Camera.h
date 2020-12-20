@@ -110,6 +110,7 @@ public:
 
     void cycleMode();
 
+    glm::vec3 getPosition();
 };
 
 

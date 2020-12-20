@@ -65,6 +65,7 @@ public:
     void addMaterial(const std::string &name, Material *material);
 
     Material *getMaterial(const std::string &name);
+
 };
 
 

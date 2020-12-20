@@ -5,15 +5,13 @@
 #include "MeshObject.h"
 
 void MeshObject::draw(Viewport *viewport) {
-    Shader *shader = material->shader;
     material->use();
-    // Send MVP to shader in uniform variable
-    shader->setMatrix("model", getModelMatrix());
-    shader->setMatrix("camera", viewport->getCameraMatrix());
-    shader->setVec3("light.color",  viewport->getLight()->color);
-    shader->setVec3("light.position", viewport->getLight()->position);
-    shader->setVec3("light.ambient", viewport->ambientColor);
-
+    material->shader->setMatrix("model", getModelMatrix());
+    material->shader->setMatrix("camera", viewport->getCameraMatrix());
+    material->shader->setVec3("viewPos", viewport->getActiveCamera()->getPosition());
+    material->shader->setVec3("light.color",  viewport->getLight()->color);
+    material->shader->setVec3("light.position", viewport->getLight()->position);
+    material->shader->setVec3("light.ambient", viewport->ambientColor);
     // Add Vertex Position Attribute
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);

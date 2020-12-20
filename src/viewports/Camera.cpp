@@ -137,3 +137,7 @@ void Camera::processInput() {
         moveDown();
     }
 }
+
+glm::vec3 Camera::getPosition() {
+    return position;
+}
