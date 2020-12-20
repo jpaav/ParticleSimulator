@@ -14,12 +14,14 @@
 #include <vector>
 
 #include "../viewports/Shader.h"
+#include "../viewports/Viewport.fwd.h"
+#include "../viewports/Viewport.h"
 
 class Object {
 public:
     Object();
     virtual ~Object();
-    virtual void draw(glm::mat4 &cameraMatrix, Shader *shader) = 0;
+    virtual void draw(Viewport *viewport) = 0;
     glm::vec3 position;
     glm::vec4 rotation;
     glm::vec3 scale;

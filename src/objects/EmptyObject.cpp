@@ -9,11 +9,13 @@ EmptyObject::EmptyObject() : Object() {
     glBufferData(GL_ARRAY_BUFFER, sizeof(axisVertices), axisVertices, GL_STATIC_DRAW);
 }
 
-void EmptyObject::draw(glm::mat4 &cameraMatrix, Shader *shader) {
+void EmptyObject::draw(Viewport *viewport) {
+
+    Shader *shader = viewport->getShader();
 
     // Send MVP to shader in uniform variable
     shader->setMatrix("model", getModelMatrix());
-    shader->setMatrix("camera", cameraMatrix);
+    shader->setMatrix("camera", viewport->getCameraMatrix());
 
     // Add Vertex Position Attribute
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);

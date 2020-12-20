@@ -11,14 +11,15 @@
 class MeshObject : public Object {
 public:
     explicit MeshObject(const char* objPath);
-    void draw(glm::mat4 &cameraMatrix, Shader *shader) override;
+    ~MeshObject();
+    void draw(Viewport *viewport) override;
 protected:
     GLuint uvBuffer;
     GLuint normalBuffer;
     std::vector<glm::vec2> uvs;
     std::vector<glm::vec3> normals;
 
-    bool loadObj(const char *objPath);
+    void loadObj(const char *objPath);
 };
 
 

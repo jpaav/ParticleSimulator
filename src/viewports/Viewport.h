@@ -9,9 +9,11 @@
 #include <GLFW/glfw3.h>
 
 #include "Camera.h"
+#include "../objects/Object.fwd.h"
 #include "../objects/Object.h"
 #include "Shader.h"
 #include "../callbacks.h"
+#include "Light.h"
 
 #include <string>
 #include <vector>
@@ -23,7 +25,11 @@ private:
     GLuint vertexArrayObject;
     std::vector<Camera*> cameras;
     Camera* activeCamera;
+
     std::vector<Object*> objects;
+    // TODO: allow multiple lights
+    Light* light;
+
     glm::dvec2 lastCursorPosition;
     glm::dvec2 cursorPosition;
     glm::ivec2 dimensions;
@@ -32,6 +38,8 @@ private:
     double* deltaTime;
     double lastFrame;
 public:
+    glm::vec3 ambientColor;
+
     Viewport(const char* name, int width, int height);
     virtual ~Viewport();
 
@@ -41,6 +49,11 @@ public:
     bool shouldClose();
     void render();
 
+    glm::mat4 getCameraMatrix();
+
+    Shader * getShader();
+
+    Light *getLight();
 };
 
 

@@ -3,6 +3,7 @@
 //
 
 #include "Viewport.h"
+#include "Light.h"
 
 
 Viewport::Viewport(const char *name, int width, int height) {
@@ -32,8 +33,6 @@ Viewport::Viewport(const char *name, int width, int height) {
     auto camera = new Camera(window);
     cameras.push_back(camera);
     activeCamera = camera;
-    // Setup Shader
-    this->shader = nullptr;
     // Init GLEW (should do nothing if it has already been initialized)
     glewExperimental = GL_TRUE;
     GLenum err = glewInit();
@@ -44,6 +43,10 @@ Viewport::Viewport(const char *name, int width, int height) {
     }
     // Setup vertex buffer object
     glGenVertexArrays(1, &vertexArrayObject);
+    // Setup lighting
+    ambientColor = glm::vec3(0.2f, 0.3f, 0.3f);
+    light = new Light();
+    this->shader = nullptr;
 }
 
 Viewport::~Viewport() {
@@ -72,9 +75,7 @@ void Viewport::render() {
     // Setup OpenGL flags
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-    // Use shader
-    // TODO: add a world/scene class to handle this
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClearColor(ambientColor.r, ambientColor.b, ambientColor.g, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     this->shader->use();
     // Run camera routines
@@ -82,7 +83,7 @@ void Viewport::render() {
     glBindVertexArray(vertexArrayObject);
     // Draw each object
     for (Object *const &object : this->objects) {
-        object->draw(cameraMatrix, this->shader);
+        object->draw(this);
     }
     glfwSwapBuffers(this->window);
 }
@@ -97,4 +98,16 @@ void Viewport::setShader(Shader *shader) {
 
 Camera *Viewport::getActiveCamera() {
     return this->activeCamera;
+}
+
+glm::mat4 Viewport::getCameraMatrix() {
+    return activeCamera->cameraMatrix(dimensions);
+}
+
+Shader * Viewport::getShader() {
+    return shader;
+}
+
+Light *Viewport::getLight() {
+    return light;
 }

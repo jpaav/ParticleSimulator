@@ -4,15 +4,16 @@
 
 #include "MeshObject.h"
 
-void MeshObject::draw(glm::mat4 &cameraMatrix, Shader *shader) {
+void MeshObject::draw(Viewport *viewport) {
+    Shader *shader = viewport->getShader();
     // Send MVP to shader in uniform variable
     shader->setMatrix("model", getModelMatrix());
-    shader->setMatrix("camera", cameraMatrix);
+    shader->setMatrix("camera", viewport->getCameraMatrix());
     // TODO: make a material class that handles this stuff
-    shader->setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-    shader->setVec3("lightColor",  1.0f, 1.0f, 1.0f);
-    // TODO: make a light class that handles this stuff
-    shader->setVec3("lightPos", 1.0f, 1.0f, 1.0f);
+    shader->setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
+    shader->setVec3("light.color",  viewport->getLight()->color);
+    shader->setVec3("light.position", viewport->getLight()->position);
+    shader->setVec3("light.ambient", viewport->ambientColor);
 
     // Add Vertex Position Attribute
     glEnableVertexAttribArray(0);
@@ -46,7 +47,7 @@ MeshObject::MeshObject(const char *objPath) : Object() {
     glGenBuffers(1, &uvBuffer);
     glGenBuffers(1, &normalBuffer);
 
-    bool res = loadObj(objPath);
+    loadObj(objPath);
 
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), vertices.data(), GL_STATIC_DRAW);
@@ -58,7 +59,12 @@ MeshObject::MeshObject(const char *objPath) : Object() {
     glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), normals.data(), GL_STATIC_DRAW);
 }
 
-bool MeshObject::loadObj(const char *path) {
+MeshObject::~MeshObject() {
+    glDeleteBuffers(1, &uvBuffer);
+    glDeleteBuffers(1, &normalBuffer);
+}
+
+void MeshObject::loadObj(const char *path) {
     std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
     std::vector<glm::vec3> temp_vertices;
     std::vector<glm::vec2> temp_uvs;
@@ -67,7 +73,7 @@ bool MeshObject::loadObj(const char *path) {
     FILE *file = fopen(path, "r");
     if (file == nullptr) {
         std::cerr << "MeshObject::loadObj => Impossible to open file!" << std::endl;
-        return false;
+        return;
     }
     while (true) {
         char lineHeader[1024];
@@ -102,7 +108,7 @@ bool MeshObject::loadObj(const char *path) {
                                  &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
             if (matches != 9) {
                 printf("Try other options, this parser is too basic for that kind of file!\n");
-                return false;
+                return;
             }
             vertexIndices.push_back(vertexIndex[0]);
             vertexIndices.push_back(vertexIndex[1]);
@@ -128,5 +134,4 @@ bool MeshObject::loadObj(const char *path) {
             normals.push_back(normal);
         }
     }
-    return true;
 }

@@ -1,0 +1,10 @@
+//
+// Created by Joseph Paavola on 12/20/20.
+//
+
+#ifndef PARTICLESIMULATOR_VIEWPORT_FWD_H
+#define PARTICLESIMULATOR_VIEWPORT_FWD_H
+
+class Viewport;
+
+#endif //PARTICLESIMULATOR_VIEWPORT_FWD_H

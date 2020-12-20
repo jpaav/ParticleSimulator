@@ -15,7 +15,7 @@ class EmptyObject : public Object {
 public:
     EmptyObject();
 
-    void draw(glm::mat4 &cameraMatrix, Shader *shader) override;
+    void draw(Viewport *viewport) override;
 
 private:
     constexpr static const float axisVertices[] = {
