@@ -7,7 +7,7 @@
 #include "viewports/Camera.h"
 #include "callbacks.h"
 #include "objects/EmptyObject.h"
-
+#include "objects/MeshObject.h"
 
 
 int main() {
@@ -27,7 +27,8 @@ int main() {
     std::map<std::string, Viewport *> viewports = std::map<std::string, Viewport *>();
     viewports["main"] = new Viewport("Particle Simulator", 1440, 900);
 
-    viewports["main"]->addObject(new EmptyObject());
+    viewports["main"]->addObject(
+            new MeshObject("/Users/josephpaavola/CLionProjects/ParticleSimulator/src/objects/meshes/icosphere.obj"));
 
     auto shader = new Shader("/Users/josephpaavola/CLionProjects/ParticleSimulator/src/shaders/simple_v.glsl",
                              "/Users/josephpaavola/CLionProjects/ParticleSimulator/src/shaders/simple_f.glsl");
