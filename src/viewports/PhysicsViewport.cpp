@@ -9,30 +9,11 @@ glm::vec3 exampleField(float x, float y, float z) {
 }
 
 void PhysicsViewport::render() {
-    double currentTime = glfwGetTime();
-    *deltaTime = currentTime - lastFrame;
-    lastFrame = currentTime;
-    std::cout << "FPS: " << 1 / *deltaTime << "(" << *deltaTime * 1000 << "ms)" << std::endl;
-    glfwMakeContextCurrent(this->window);
-    lastCursorPosition = cursorPosition;
-    glfwGetCursorPos(this->window, &cursorPosition[0], &cursorPosition[1]);
-    activeCamera->processInput();
-    activeCamera->updateRotation(lastCursorPosition - cursorPosition);
-    // Setup OpenGL flags
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
-    glClearColor(ambientColor.r, ambientColor.b, ambientColor.g, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    // Run camera routines
-    auto cameraMatrix = this->activeCamera->cameraMatrix(dimensions);
-    glBindVertexArray(vertexArrayObject);
+    renderSetup();
     // Draw a basic vector field
     drawVectorField(5, 1.0, exampleField);
-    // Draw each object
-    for (Object *const &object : this->objects) {
-        object->draw(this);
-    }
-    glfwSwapBuffers(this->window);
+    renderObjects();
+    renderTeardown();
 }
 
 void PhysicsViewport::drawVectorField(int stepCount, float stepSize, glm::vec3 (*vectorField)(float, float, float)) {

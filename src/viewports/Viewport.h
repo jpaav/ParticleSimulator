@@ -39,6 +39,10 @@ protected:
     glm::ivec2 dimensions;
     double *deltaTime;
     double lastFrame;
+
+    void renderSetup();
+    void renderObjects();
+    void renderTeardown();
 public:
     glm::vec3 ambientColor;
 

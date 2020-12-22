@@ -68,7 +68,7 @@ bool Viewport::shouldClose() {
     return glfwWindowShouldClose(this->window);
 }
 
-void Viewport::render() {
+void Viewport::renderSetup() {
     double currentTime = glfwGetTime();
     *deltaTime = currentTime - lastFrame;
     lastFrame = currentTime;
@@ -86,11 +86,23 @@ void Viewport::render() {
     // Run camera routines
     auto cameraMatrix = this->activeCamera->cameraMatrix(dimensions);
     glBindVertexArray(vertexArrayObject);
+}
+
+void Viewport::renderTeardown() {
+    glfwSwapBuffers(this->window);
+}
+
+void Viewport::renderObjects() {
     // Draw each object
     for (Object *const &object : this->objects) {
         object->draw(this);
     }
-    glfwSwapBuffers(this->window);
+}
+
+void Viewport::render() {
+    renderSetup();
+    renderObjects();
+    renderTeardown();
 }
 
 void Viewport::addObject(Object *object) {
