@@ -9,6 +9,7 @@
 #include "objects/EmptyObject.h"
 #include "objects/MeshObject.h"
 #include "materials/PhongMaterial.h"
+#include "viewports/PhysicsViewport.h"
 
 // TODO: support this author: https://www.paypal.com/paypalme/learnopengl/
 
@@ -27,7 +28,7 @@ int main() {
     glfwSetErrorCallback(error_callback);
 
     std::map<std::string, Viewport *> viewports = std::map<std::string, Viewport *>();
-    viewports["main"] = new Viewport("Particle Simulator", 1440, 900);
+    viewports["main"] = new PhysicsViewport("Particle Simulator", 1440, 900);
 
     // Setup shaders
     auto simpleShader = new Shader("/Users/josephpaavola/CLionProjects/ParticleSimulator/src/shaders/simple_v.glsl",
@@ -50,9 +51,11 @@ int main() {
     );
 
     // Setup objects
-    viewports["main"]->addObject(
-            new MeshObject("/Users/josephpaavola/CLionProjects/ParticleSimulator/src/objects/meshes/icosphere.obj",
-                           viewports["main"]->getMaterial("phong")));
+//    viewports["main"]->addObject(
+//            new MeshObject("/Users/josephpaavola/CLionProjects/ParticleSimulator/src/objects/meshes/icosphere.obj",
+//                           viewports["main"]->getMaterial("phong")));
+
+    viewports["main"]->addObject(new EmptyObject());
 
 
     bool shouldClose = false;

@@ -22,7 +22,7 @@
 #include <iostream>
 
 class Viewport {
-private:
+protected:
     GLFWwindow *window;
     GLuint vertexArrayObject;
     std::vector<Camera *> cameras;
@@ -56,7 +56,7 @@ public:
 
     bool shouldClose();
 
-    void render();
+    virtual void render();
 
     glm::mat4 getCameraMatrix();
 
