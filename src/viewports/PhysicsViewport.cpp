@@ -5,13 +5,13 @@
 #include "PhysicsViewport.h"
 
 glm::vec3 exampleField(float x, float y, float z) {
-    return glm::vec3(x * y * z);
+    return glm::vec3(x*y, y*z, z*x);
 }
 
 void PhysicsViewport::render() {
     renderSetup();
     // Draw a basic vector field
-    drawVectorField(5, 1.0, exampleField);
+    drawVectorField(10, 2.0, exampleField);
     renderObjects();
     renderTeardown();
 }
@@ -24,8 +24,16 @@ void PhysicsViewport::drawVectorField(int stepCount, float stepSize, glm::vec3 (
         for (int yIndex = 0; yIndex < stepCount; yIndex++) {
             for (int zIndex = 0; zIndex < stepCount; zIndex++) {
                 input = glm::vec3(startPosition.x + xIndex * stepSize, startPosition.y + yIndex * stepSize, startPosition.z + zIndex * stepSize);
-                glm::vec3 outputVector = glm::normalize(vectorField(input.x, input.y, input.z));
+                glm::vec3 outputVector = glm::normalize(vectorField(input.x, input.y, input.z)) * stepSize;
+                // Line vertices
                 outputVertices.push_back(input);
+                outputVertices.push_back(input+outputVector);
+                // Arrow head vertices
+                glm::vec3 arrowHeadPoint = input+(outputVector * 0.8f);
+                glm::vec3 normal = glm::normalize(glm::cross(arrowHeadPoint, arrowHeadPoint * glm::vec3(1.0f, 2.0f, 3.0f)));
+                outputVertices.push_back(arrowHeadPoint + 0.2f * normal);
+                outputVertices.push_back(input+outputVector);
+                outputVertices.push_back(arrowHeadPoint - 0.2f * normal);
                 outputVertices.push_back(input+outputVector);
             }
         }
