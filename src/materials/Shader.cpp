@@ -84,6 +84,7 @@ Shader::~Shader() {
 }
 
 void Shader::use() const {
+    // TODO: know which uniforms to set up here somehow? It would be nice to have one function to call.
     glUseProgram(id);
 }
 

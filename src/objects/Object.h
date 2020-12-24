@@ -28,7 +28,7 @@ public:
 protected:
     GLuint vertexBuffer;
     std::vector<glm::vec3> vertices;
-    glm::mat4 getModelMatrix();
+    glm::mat4 getModelMatrix() const;
 };
 
 

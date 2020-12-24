@@ -4,12 +4,11 @@
 #include <iostream>
 #include <map>
 #include "viewports/Viewport.h"
-#include "cameras/Camera.h"
 #include "callbacks.h"
 #include "objects/EmptyObject.h"
-#include "objects/MeshObject.h"
 #include "materials/PhongMaterial.h"
 #include "viewports/PhysicsViewport.h"
+#include "objects/WireObject.h"
 
 // TODO: support this author: https://www.paypal.com/paypalme/learnopengl/
 
@@ -55,7 +54,8 @@ int main() {
 //            new MeshObject("/Users/josephpaavola/CLionProjects/ParticleSimulator/src/objects/meshes/icosphere.obj",
 //                           viewports["main"]->getMaterial("phong")));
 
-    viewports["main"]->addObject(new EmptyObject());
+//    viewports["main"]->addObject(new WireObject());
+    dynamic_cast<PhysicsViewport*>(viewports["main"])->addField("magnetic", new FieldObject(5, 1.0, 4));
 
 
     bool shouldClose = false;

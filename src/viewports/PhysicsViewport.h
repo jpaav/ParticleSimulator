@@ -5,17 +5,21 @@
 #ifndef PARTICLESIMULATOR_PHYSICSVIEWPORT_H
 #define PARTICLESIMULATOR_PHYSICSVIEWPORT_H
 
+#include <map>
 
 #include "Viewport.h"
+#include "../objects/FieldObject.h"
 
 class PhysicsViewport : public Viewport {
-
-    void render() override;
-
-    void drawVectorField(int resolution, float stepSize, glm::vec3 (*vectorField)(float, float, float));
-
+private:
+    std::map<std::string, FieldObject*> fields;
+    void renderFields();
 public:
     PhysicsViewport(const char *name, int width, int height);
+    ~PhysicsViewport();
+
+    void render() override;
+    void addField(const std::string &name, FieldObject *field);
 };
 
 

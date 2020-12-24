@@ -48,7 +48,7 @@ public:
 
     Viewport(const char *name, int width, int height);
 
-    virtual ~Viewport();
+    ~Viewport();
 
     void addObject(Object *object);
 
