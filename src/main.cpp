@@ -55,7 +55,7 @@ int main() {
 //                           viewports["main"]->getMaterial("phong")));
 
 //    viewports["main"]->addObject(new WireObject());
-    dynamic_cast<PhysicsViewport*>(viewports["main"])->addField("magnetic", new FieldObject(5, 1.0, 4));
+    dynamic_cast<PhysicsViewport*>(viewports["main"])->addField("magnetic", new FieldObject(10, 1.0, 10, true));
 
 
     bool shouldClose = false;
