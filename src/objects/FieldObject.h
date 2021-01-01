@@ -7,21 +7,24 @@
 
 
 #include "Object.h"
-#define SMALL_H 1e-7
+#define SMALL_H 1e-5
 
 class FieldObject : public Object {
 public:
-    FieldObject(int stepCount, float stepSize, int iterationCount);
-    FieldObject(int stepCount, float stepSize, int iterationCount, bool drawArrowHeads);
+    FieldObject(int stepCount, double stepSize, int iterationCount);
+    FieldObject(int stepCount, double stepSize, int iterationCount, bool drawArrowHeads, bool drawColored);
     void draw(Viewport *viewport) override;
 protected:
     void compute();
+    void drawColored(Viewport *viewport);
+    void drawMonochrome(Viewport *viewport);
     int stepCount;
-    float stepSize;
+    double stepSize;
     int iterationCount;
-    bool drawArrowHeads;
+    bool shouldDrawArrows;
+    bool shouldDrawColored;
 
-    glm::vec3 derivative(glm::vec3 x, glm::vec3 (*f)(glm::vec3), float h);
+    glm::dvec3 derivative(glm::dvec3 x, glm::dvec3 (*f)(glm::dvec3), double h);
 };
 
 

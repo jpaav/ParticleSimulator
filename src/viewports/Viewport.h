@@ -25,6 +25,7 @@ class Viewport {
 protected:
     GLFWwindow *window;
     GLuint vertexArrayObject;
+
     std::vector<Camera *> cameras;
     Camera *activeCamera;
 

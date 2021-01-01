@@ -26,6 +26,7 @@ public:
     glm::vec4 rotation;
     glm::vec3 scale;
 protected:
+    // TODO: use an element index buffer (https://learnopengl.com/Getting-started/Hello-Triangle)
     GLuint vertexBuffer;
     std::vector<glm::vec3> vertices;
     glm::mat4 getModelMatrix() const;

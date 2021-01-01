@@ -36,6 +36,9 @@ int main() {
     auto phongShader = new Shader("/Users/josephpaavola/CLionProjects/ParticleSimulator/src/shaders/phong_v.glsl",
                                   "/Users/josephpaavola/CLionProjects/ParticleSimulator/src/shaders/phong_f.glsl");
     viewports["main"]->addShader("phong", phongShader);
+    auto vertexShader = new Shader("/Users/josephpaavola/CLionProjects/ParticleSimulator/src/shaders/vertex_v.glsl",
+                                  "/Users/josephpaavola/CLionProjects/ParticleSimulator/src/shaders/vertex_f.glsl");
+    viewports["main"]->addShader("vertex", vertexShader);
 
     // Setup materials
     viewports["main"]->addMaterial(
@@ -55,7 +58,7 @@ int main() {
 //                           viewports["main"]->getMaterial("phong")));
 
 //    viewports["main"]->addObject(new WireObject());
-    dynamic_cast<PhysicsViewport*>(viewports["main"])->addField("magnetic", new FieldObject(10, 1.0, 10, true));
+    dynamic_cast<PhysicsViewport*>(viewports["main"])->addField("magnetic", new FieldObject(10, 1.0, 10, false, false));
 
 
     bool shouldClose = false;
